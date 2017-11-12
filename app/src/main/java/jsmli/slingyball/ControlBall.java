@@ -84,9 +84,9 @@ public class ControlBall extends View {
 //        synchronized (circleLock) {
 //            for (Circle c : circles) {
 //                cp.setColor(Color.BLACK);
-//                canvas.drawCircle(c.getX(), c.getY(), c.getRadius(), cp);
-//                cp.setColor(c.getColor());
-//                canvas.drawCircle(c.getX(), c.getY(), c.getRadius() - 5, cp);
+//                canvas.drawCircle(player.getX(), player.getY(), player.getRadius(), cp);
+//                cp.setColor(player.getColor());
+//                canvas.drawCircle(player.getX(), player.getY(), player.getRadius() - 5, cp);
 //            }
 //        }
 //

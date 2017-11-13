@@ -6,19 +6,16 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 
-/**
- * Created by simin on 11/11/2017.
- */
 
 public class ControlBall extends View {
 
     private float controlBallCenterX;
     private float controlBallCenterY;
     private float controlBallRadius;
+    public static PlayerBall playerListener;
 
     private Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
     private float startX;
@@ -55,9 +52,9 @@ public class ControlBall extends View {
         super(context, attrs, defStyleAttr);
     }
 
-    public ControlBall(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
+//    public ControlBall(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+//        super(context, attrs, defStyleAttr, defStyleRes);
+//    }
 
     @Override
     protected void onSizeChanged (int w, int h, int oldw, int oldh){
@@ -81,44 +78,6 @@ public class ControlBall extends View {
         if(drawing)
             canvas.drawLine(startX, startY, endX, endY, p);
 
-//        synchronized (circleLock) {
-//            for (Circle c : circles) {
-//                cp.setColor(Color.BLACK);
-//                canvas.drawCircle(player.getX(), player.getY(), player.getRadius(), cp);
-//                cp.setColor(player.getColor());
-//                canvas.drawCircle(player.getX(), player.getY(), player.getRadius() - 5, cp);
-//            }
-//        }
-//
-//        // Preview Circle
-//        if (makingCircle) {
-//            cp.setColor(Color.BLACK);
-//            canvas.drawCircle(newX, newY, newRadius, cp);
-//            cp.setColor(newColor);
-//            canvas.drawCircle(newX, newY, newRadius - 5, cp);
-//        }
-//
-//        // Circle Count
-//        tp.setColor(Color.WHITE);
-//        tp.setTextAlign(Paint.Align.CENTER);
-//        int fontSizeDip = 30;
-//        int fontSizePixels = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, fontSizeDip, getResources().getDisplayMetrics());
-//        tp.setTextSize(fontSizePixels);
-//
-//        canvas.drawText(circles.size() + " " + getResources().getString(R.string.count_balls), maxX / 2, fontSizePixels, tp);
-//
-//        if (DEBUG) {
-//            String multiLine = "gx: " + gx + "\ngy: " + gy;
-//            tp.setTextAlign(Paint.Align.LEFT);
-//            tp.setTextSize(30);
-//            String lines[] = multiLine.split("\n");
-//            int yOffset = 30;
-//            for (int i = 0; i < lines.length; ++i) {
-//                canvas.drawText(lines[i], 0, 60 + yOffset, tp);
-//                tp.getTextBounds(lines[i], 0, lines[i].length(), currentBounds);
-//                yOffset += currentBounds.height() + 5;
-//            }
-//        }
     }
 
     @Override
@@ -127,11 +86,9 @@ public class ControlBall extends View {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
 
-                // TO:DO Use trigonometry to cut the corners of this if statement
-                if(event.getX() >  controlBallCenterX - controlBallRadius
-                        && event.getX() < controlBallCenterX + controlBallRadius
-                        && event.getY() >  controlBallCenterY - controlBallRadius
-                        && event.getY() < controlBallCenterY + controlBallRadius){
+                if (Math.pow((event.getX()-controlBallCenterX),2) +
+                    Math.pow((event.getY()-controlBallCenterY),2) <
+                    Math.pow(controlBallRadius,2)) {
 
                     drawing = true;
                     startX = event.getX();
@@ -141,23 +98,6 @@ public class ControlBall extends View {
 
                 }
 
-
-
-//                for (int i = circles.size() - 1; i >= 0; --i) {
-//                    if (circles.get(i).isTouching(touchX, touchY)) {
-//                        synchronized (circleLock) {
-//                            circles.remove(circles.get(i));
-//                        }
-//                        return true;
-//                    }
-//                }
-//
-//                newX = touchX;
-//                newY = touchY;
-//                newRadius = MIN_BALL_RADIUS;
-//                newColor = Color.argb(255, rand.nextInt(256),
-//                        rand.nextInt(256), rand.nextInt(256));
-//                makingCircle = true;
 
                 return true;
 
@@ -180,12 +120,37 @@ public class ControlBall extends View {
 
             case MotionEvent.ACTION_UP:
 
+                if(GameView.getGravity() == 0f){
+
+                    GameView.setGravity(5.0f);
+                }
+
                 drawing = false;
+
+
+                playerListener.setVx(startX-endX);
+                playerListener.setVy(startY-endY);
 
 
                 return true;
         }
         return false;
+    }
+
+    public float getStartX() {
+        return this.startX;
+    }
+
+    public float getStartY() {
+        return this.startY;
+    }
+
+    public float getEndX() {
+        return this.endX;
+    }
+
+    public float getEndY() {
+        return this.endY;
     }
 
 }

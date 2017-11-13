@@ -1,9 +1,5 @@
 package jsmli.slingyball;
 
-/**
- * Created by simin on 11/12/2017.
- */
-
 public class PlayerBall {
 
     private float x, y, vx, vy;
@@ -18,14 +14,7 @@ public class PlayerBall {
         this.radius = radius;
         this.elasticity = elasticity;
         this.color = color;
-    }
-
-    public static int distance(float x1, float y1, float x2, float y2) {
-        return (int) Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-    }
-
-    public boolean isTouching(float x, float y) {
-        return distance(x, y, this.x, this.y) <= this.radius;
+        ControlBall.playerListener = this;
     }
 
     public float getX() {

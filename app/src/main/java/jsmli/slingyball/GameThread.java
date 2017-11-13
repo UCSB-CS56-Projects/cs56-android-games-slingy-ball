@@ -1,9 +1,5 @@
 package jsmli.slingyball;
 
-/**
- * Created by simin on 11/12/2017.
- */
-
 import android.os.SystemClock;
 
 public class GameThread extends Thread {
@@ -25,7 +21,7 @@ public class GameThread extends Thread {
         long time2;
 
         while (running) {
-            SystemClock.sleep(34);
+            SystemClock.sleep(5);
             time2 = System.currentTimeMillis();
             int delta = (int) (time2 - time1);
             gameView.update(delta);

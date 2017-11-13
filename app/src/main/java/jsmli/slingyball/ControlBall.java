@@ -14,21 +14,24 @@ public class ControlBall extends View {
     private float controlBallCenterX;
     private float controlBallCenterY;
     private float controlBallRadius;
+
     public static PlayerBall playerListener;
+
     boolean validTouch;
 
+    boolean drawing = false;
+
     private Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
+
     private float startX;
     private float startY;
     private float endX;
     private float endY;
-    boolean drawing = false;
 
     public ControlBall(Context context) {
         super(context);
 
         this.setBackgroundColor(Color.RED);
-
     }
 
     public ControlBall(Context context, @Nullable AttributeSet attrs) {
@@ -37,7 +40,6 @@ public class ControlBall extends View {
         p.setColor(Color.WHITE);
         p.setStrokeWidth(10);
         this.setBackgroundColor(Color.RED);
-
     }
 
     public ControlBall(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
@@ -54,7 +56,6 @@ public class ControlBall extends View {
         controlBallCenterX = this.getWidth()/2;
         controlBallCenterY = this.getHeight()/2;
         controlBallRadius = this.getWidth()/9;
-
     }
 
 
@@ -66,7 +67,6 @@ public class ControlBall extends View {
 
         if(drawing)
             canvas.drawLine(startX, startY, endX, endY, p);
-
     }
 
     @Override
@@ -84,9 +84,7 @@ public class ControlBall extends View {
                         drawing = true;
                         startX = event.getX();
                         startY = event.getY();
-
                     }
-
                     validTouch = true;
 
                 }else{
@@ -103,7 +101,6 @@ public class ControlBall extends View {
                     endY = event.getY();
 
                     postInvalidate();
-
                 }
 
                 return true;
@@ -111,7 +108,6 @@ public class ControlBall extends View {
             case MotionEvent.ACTION_UP:
 
                 if(validTouch) {
-
 
                     if (GameView.getGravity() == 0f) {
 
@@ -122,7 +118,6 @@ public class ControlBall extends View {
 
                     playerListener.setVx(startX - endX);
                     playerListener.setVy(startY - endY);
-
                 }
 
                 return true;

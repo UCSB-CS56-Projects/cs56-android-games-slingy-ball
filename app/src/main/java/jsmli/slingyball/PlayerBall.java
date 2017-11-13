@@ -73,7 +73,4 @@ public class PlayerBall {
         this.color = color;
     }
 
-
-
-
 }

@@ -47,5 +47,4 @@ public class Platform {
         this.color = color;
     }
 
-
 }

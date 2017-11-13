@@ -5,7 +5,7 @@ public class Platform {
     private float x;
     private float y;
     private float length;
-    private float height = 25;
+    private float height = 16;
 
 
     private int color;

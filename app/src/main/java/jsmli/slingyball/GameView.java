@@ -17,6 +17,7 @@ public class GameView extends View {
     private Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
     private static float gravity = 0.0f;
     private float scrollVelocity = 0.0f;
+    public static final float GAMEGRAVITY = 4f;
 
     GameThread thread;
 
@@ -51,7 +52,7 @@ public class GameView extends View {
     }
 
     public void createPlatform() {
-        platforms.add(new Platform(100, 100, 60, Color.WHITE));
+        platforms.add(new Platform(this.getWidth()/2, -60, 260, Color.WHITE));
     }
 
     protected void onLayout (boolean changed,
@@ -62,12 +63,11 @@ public class GameView extends View {
 
         createPlayer();
 
+        platforms.add(new Platform(this.getWidth()+270, this.getHeight()-20, 260, Color.WHITE));// invisible platform for index purposes
         platforms.add(new Platform(this.getWidth()/2, this.getHeight()/2, 260, Color.WHITE));
 
         player.setVx(0);
         player.setVy(0);
-
-
 
         startThread();
     }
@@ -76,7 +76,21 @@ public class GameView extends View {
 
                 player.setVy(player.getVy() + gravity );
                 player.setX(player.getX() + delta / 100f * player.getVx());
-                player.setY(player.getY() + scrollVelocity + delta / 100f * player.getVy());
+                player.setY(player.getY() + delta / 100f * (player.getVy()+scrollVelocity));
+
+                for(Platform plat: platforms){
+
+                    plat.setY(plat.getY() + delta / 100f * scrollVelocity);
+
+                }
+
+                if(platforms.get(0).getY() >= this.getHeight()-20){
+
+                    scrollVelocity = 0;
+                    gravity = GAMEGRAVITY;
+                    platforms.get(0).setY(this.getHeight()-20);
+
+                }
 
                 if (player.getX() < player.getRadius()) {
                     player.setVx(-player.getVx() * player.getElasticity());
@@ -94,8 +108,8 @@ public class GameView extends View {
                     player.setY(this.getHeight() - player.getRadius());
                 }
 
-                for(Platform plat: platforms){
-
+                for(int i = 0; i < platforms.size(); i++){
+                    Platform plat = platforms.get(i);
                     if(player.getX() < plat.getX() + plat.getLength() && player.getX() > plat.getX()){
 
 
@@ -105,7 +119,27 @@ public class GameView extends View {
                             player.setVy(-player.getVy() * player.getElasticity());
 
                             if(player.getY()+player.getRadius() > plat.getY() && player.getY()-player.getRadius() < plat.getY()) {
-                                player.setY(plat.getY() - player.getRadius());
+
+
+                                if(platforms.indexOf(plat) == 1){
+
+                                    player.setVy(0);
+                                    player.setVx(0);
+                                    scrollVelocity = 100;
+                                    gravity = 0;
+
+                                    createPlatform();
+                                    platforms.remove(0);
+
+
+
+                                }else{
+
+                                    player.setY(plat.getY() - player.getRadius());
+                                }
+
+
+
                             } else {
                                 player.setY(plat.getY() + plat.getHeight() + player.getRadius());
                             }
@@ -143,8 +177,7 @@ public class GameView extends View {
 
         for(Platform x: platforms){
             p.setColor(x.getColor());
-            canvas.drawRect(x.getX(), x.getY(),x.getX()+x.getLength(), x.getY()+x
-                    .getHeight(), p);
+            canvas.drawRect(x.getX(), x.getY(),x.getX()+x.getLength(), x.getY()+x.getHeight(), p);
         }
 
 

@@ -122,7 +122,7 @@ public class ControlBall extends View {
 
                 if(GameView.getGravity() == 0f){
 
-                    GameView.setGravity(5.0f);
+                    GameView.setGravity(GameView.GAMEGRAVITY);
                 }
 
                 drawing = false;

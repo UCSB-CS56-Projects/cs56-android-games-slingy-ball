@@ -16,7 +16,7 @@ public class GameView extends View {
     ArrayList<Platform> platforms = new ArrayList<>();
     private Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
     private static float gravity = 0.0f;
-    private float scrollVelocity = 0.0f;
+    private static float scrollVelocity = 0.0f;
     public static final float GAMEGRAVITY = 4f;
 
     GameThread thread;
@@ -194,6 +194,10 @@ public class GameView extends View {
     public static float getGravity(){
         return gravity;
 
+    }
+
+    public static float getScrollVelocity(){
+        return scrollVelocity;
     }
 
 

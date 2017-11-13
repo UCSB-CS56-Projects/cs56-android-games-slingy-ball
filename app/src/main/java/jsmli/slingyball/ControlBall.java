@@ -9,13 +9,13 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-
 public class ControlBall extends View {
 
     private float controlBallCenterX;
     private float controlBallCenterY;
     private float controlBallRadius;
     public static PlayerBall playerListener;
+    boolean validTouch;
 
     private Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
     private float startX;
@@ -24,27 +24,19 @@ public class ControlBall extends View {
     private float endY;
     boolean drawing = false;
 
-
     public ControlBall(Context context) {
         super(context);
 
-
-
         this.setBackgroundColor(Color.RED);
-
 
     }
 
     public ControlBall(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
 
-
         p.setColor(Color.WHITE);
         p.setStrokeWidth(10);
         this.setBackgroundColor(Color.RED);
-
-
-
 
     }
 
@@ -70,10 +62,7 @@ public class ControlBall extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-
-
         canvas.drawCircle(controlBallCenterX, controlBallCenterY, controlBallRadius, p);
-
 
         if(drawing)
             canvas.drawLine(startX, startY, endX, endY, p);
@@ -86,18 +75,23 @@ public class ControlBall extends View {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
 
-                if (Math.pow((event.getX()-controlBallCenterX),2) +
-                    Math.pow((event.getY()-controlBallCenterY),2) <
-                    Math.pow(controlBallRadius,2)) {
+                if(GameView.getScrollVelocity() == 0) {
 
-                    drawing = true;
-                    startX = event.getX();
-                    startY = event.getY();
+                    if (Math.pow((event.getX() - controlBallCenterX), 2) +
+                            Math.pow((event.getY() - controlBallCenterY), 2) <
+                            Math.pow(controlBallRadius, 2)) {
 
+                        drawing = true;
+                        startX = event.getX();
+                        startY = event.getY();
 
+                    }
 
+                    validTouch = true;
+
+                }else{
+                    validTouch = false;
                 }
-
 
                 return true;
 
@@ -110,47 +104,29 @@ public class ControlBall extends View {
 
                     postInvalidate();
 
-
-
                 }
-
-
 
                 return true;
 
             case MotionEvent.ACTION_UP:
 
-                if(GameView.getGravity() == 0f){
+                if(validTouch) {
 
-                    GameView.setGravity(GameView.GAMEGRAVITY);
+
+                    if (GameView.getGravity() == 0f) {
+
+                        GameView.setGravity(GameView.GAMEGRAVITY);
+                    }
+
+                    drawing = false;
+
+                    playerListener.setVx(startX - endX);
+                    playerListener.setVy(startY - endY);
+
                 }
-
-                drawing = false;
-
-
-                playerListener.setVx(startX-endX);
-                playerListener.setVy(startY-endY);
-
 
                 return true;
         }
         return false;
     }
-
-    public float getStartX() {
-        return this.startX;
-    }
-
-    public float getStartY() {
-        return this.startY;
-    }
-
-    public float getEndX() {
-        return this.endX;
-    }
-
-    public float getEndY() {
-        return this.endY;
-    }
-
 }

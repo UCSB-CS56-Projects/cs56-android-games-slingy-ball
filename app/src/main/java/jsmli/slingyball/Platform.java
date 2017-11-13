@@ -7,7 +7,6 @@ public class Platform {
     private float length;
     private float height = 16;
 
-
     private int color;
 
     public Platform(float x, float y, float length, int color) {
@@ -17,13 +16,11 @@ public class Platform {
         this.color = color;
         this.length = length;
 
-
     }
 
     public float getX() {
         return x;
     }
-
     public void setX(float x) {
         this.x = x;
     }
@@ -31,11 +28,9 @@ public class Platform {
     public float getY() {
         return y;
     }
-
     public void setY(float y) {
         this.y = y;
     }
-
 
     public float getLength() {
         return length;
@@ -45,19 +40,12 @@ public class Platform {
         return height;
     }
 
-
-
     public int getColor() {
         return color;
     }
-
     public void setColor(int color) {
         this.color = color;
     }
-
-
-
-
 
 
 }

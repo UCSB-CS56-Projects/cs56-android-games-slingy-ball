@@ -82,9 +82,12 @@ public class ControlBall extends View {
                             Math.pow(controlBallRadius, 2)) {
 
                         drawing = true;
+
                         startX = event.getX();
                         startY = event.getY();
+
                     }
+
                     validTouch = true;
 
                 }else{
@@ -114,10 +117,13 @@ public class ControlBall extends View {
                         GameView.setGravity(GameView.GAMEGRAVITY);
                     }
 
+                    if (drawing) {
+                        playerListener.setVx(startX - endX);
+                        playerListener.setVy(startY - endY);
+                    }
+
                     drawing = false;
 
-                    playerListener.setVx(startX - endX);
-                    playerListener.setVy(startY - endY);
                 }
 
                 return true;

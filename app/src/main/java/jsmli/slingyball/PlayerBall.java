@@ -4,10 +4,10 @@ public class PlayerBall {
 
     private float x, y, vx, vy;
     private float elasticity;
-    private int radius;
+    private float radius;
     private int color;
 
-    public PlayerBall(float x, float y, int radius, float elasticity, int color) {
+    public PlayerBall(float x, float y, float radius, float elasticity, int color) {
 
         this.x = x;
         this.y = y;
@@ -57,11 +57,11 @@ public class PlayerBall {
         this.elasticity = elasticity;
     }
 
-    public int getRadius() {
+    public float getRadius() {
         return radius;
     }
 
-    public void setRadius(int radius) {
+    public void setRadius(float radius) {
         this.radius = radius;
     }
 

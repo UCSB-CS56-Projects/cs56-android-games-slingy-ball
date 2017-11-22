@@ -46,11 +46,11 @@ public class GameView extends View {
     }
 
     public void createPlayer() {
-        player = new PlayerBall(this.getWidth()/2,this.getHeight()-50,35,0.90f,Color.WHITE);
+        player = new PlayerBall(this.getWidth()/2,this.getHeight()-50,(35.0f/986.0f)*this.getWidth(),0.90f,Color.WHITE);
     }
 
     public void createPlatform() {
-        platforms.add(new Platform(this.getWidth()/2, -60, 260, Color.WHITE));
+        platforms.add(new Platform(this.getWidth()/2, -60,260,(16.0f/1059f)*this.getHeight(),Color.WHITE));
     }
 
     protected void onLayout (boolean changed,
@@ -61,8 +61,8 @@ public class GameView extends View {
 
         createPlayer();
 
-        platforms.add(new Platform(this.getWidth()+270, this.getHeight()-20, 260, Color.WHITE));// invisible platform for index purposes
-        platforms.add(new Platform(this.getWidth()/2, this.getHeight()/2, 260, Color.WHITE));
+        platforms.add(new Platform(this.getWidth()+270, this.getHeight()-20, 260, (16.0f/1059f)*this.getHeight(), Color.WHITE));// invisible platform for index purposes
+        platforms.add(new Platform(this.getWidth()/2, this.getHeight()/2, 260, (16.0f/1059f)*this.getHeight(), Color.WHITE));
 
         player.setVx(0);
         player.setVy(0);

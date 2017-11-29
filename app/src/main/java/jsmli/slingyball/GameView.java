@@ -46,7 +46,12 @@ public class GameView extends View {
     }
 
     public void createPlayer() {
-        player = new PlayerBall(this.getWidth()/2,this.getHeight()-((35.0f/986.0f)*this.getWidth()),(35.0f/986.0f)*this.getWidth(),0.90f,Color.WHITE);
+        player = new PlayerBall(
+                this.getWidth()/2,
+                this.getHeight()-((35.0f/986.0f)*this.getWidth()),
+                (35.0f/986.0f)*this.getWidth(),
+                0.90f,Color.WHITE
+        );
     }
 
     public void createPlatform() {

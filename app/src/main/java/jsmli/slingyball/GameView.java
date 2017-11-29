@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.PointF;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
@@ -167,7 +169,6 @@ public class GameView extends View {
                 }
             }
         }
-
         postInvalidate();
     }
 
@@ -183,6 +184,48 @@ public class GameView extends View {
             p.setColor(x.getColor());
             canvas.drawRect(x.getX(), x.getY(),x.getX()+x.getLength(), x.getY()+x.getHeight(), p);
         }
+
+        if(ControlBall.getInstance().isDrawing()){
+
+            p.setColor(Color.WHITE);
+            p.setStyle(Paint.Style.FILL_AND_STROKE);
+
+            p.setStrokeWidth(0.01f*this.getWidth());
+
+            Path path = new Path();
+            PointF start = new PointF(player.getX(), player.getY());
+            PointF end = new PointF(start.x- (ControlBall.getInstance().getEndX() - ControlBall.getInstance().getStartX()) , start.y - (ControlBall.getInstance().getEndY() - ControlBall.getInstance().getStartY()));
+
+            path.moveTo(start.x, start.y);
+            path.lineTo(end.x, end.y);
+
+            path.close();
+
+            canvas.drawPath(path, p);
+
+            float triangleHeight = 0.001f*this.getWidth();
+            float triangleWidth  = 0.0003f*this.getWidth();
+
+            float cx = end.x - ((end.x-start.x)/triangleHeight) * 2 * triangleWidth;
+            float cy = end.y - ((end.y-start.y  )/triangleHeight) * 2 * triangleWidth;
+
+            PointF arrowpoint1 = new PointF(((cx + end.x)/2)-((end.y-cy)/triangleHeight)*triangleWidth, ((cy + end.y)/2)+((end.x-cx)/triangleHeight)*triangleWidth);
+
+            PointF arrowpoint2 = new PointF(((cx + end.x)/2)+((end.y-cy)/triangleHeight)*triangleWidth, ((cy + end.y)/2)-((end.x-cx)/triangleHeight)*triangleWidth);
+
+            Path trianglePath = new Path();
+            trianglePath.moveTo(end.x,end.y);
+            trianglePath.lineTo(arrowpoint1.x, arrowpoint1.y);
+            trianglePath.lineTo(arrowpoint2.x, arrowpoint2.y);
+
+            trianglePath.close();
+
+            canvas.drawPath(trianglePath, p);
+
+            p.setStrokeWidth(0.0f);
+
+        }
+
     }
 
     public static void setGravity(float newGravity){

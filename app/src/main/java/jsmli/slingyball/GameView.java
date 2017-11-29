@@ -226,6 +226,48 @@ public class GameView extends View {
 
         }
 
+        if (player.getY() < 0) {
+
+            p.setColor(Color.WHITE);
+            p.setStyle(Paint.Style.FILL_AND_STROKE);
+
+            p.setStrokeWidth(0.01f*this.getWidth());
+
+            Path indicatorPath = new Path();
+
+            PointF start = new PointF(player.getX(), 50);
+            PointF end = new PointF( player.getX() , 10);
+
+            indicatorPath.moveTo(start.x, start.y);
+            indicatorPath.lineTo(end.x, end.y);
+
+            indicatorPath.close();
+
+            canvas.drawPath(indicatorPath, p);
+
+            float triangleHeight = 0.001f*this.getWidth();
+            float triangleWidth  = 0.0003f*this.getWidth();
+
+            float cx = end.x - ((end.x-start.x)/triangleHeight) * 2 * triangleWidth;
+            float cy = end.y - ((end.y-start.y  )/triangleHeight) * 2 * triangleWidth;
+
+            PointF arrowpoint1 = new PointF(((cx + end.x)/2)-((end.y-cy)/triangleHeight)*triangleWidth, ((cy + end.y)/2)+((end.x-cx)/triangleHeight)*triangleWidth);
+
+            PointF arrowpoint2 = new PointF(((cx + end.x)/2)+((end.y-cy)/triangleHeight)*triangleWidth, ((cy + end.y)/2)-((end.x-cx)/triangleHeight)*triangleWidth);
+
+            Path trianglePath = new Path();
+            trianglePath.moveTo(end.x,end.y);
+            trianglePath.lineTo(arrowpoint1.x, arrowpoint1.y);
+            trianglePath.lineTo(arrowpoint2.x, arrowpoint2.y);
+
+            trianglePath.close();
+
+            canvas.drawPath(trianglePath, p);
+
+            p.setStrokeWidth(0.0f);
+
+
+        }
     }
 
     public static void setGravity(float newGravity){

@@ -9,7 +9,6 @@ import android.graphics.PointF;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.Button;
 
 import java.util.ArrayList;
 
@@ -27,6 +26,8 @@ public class GameView extends View {
 
     private Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
 
+    private int score = 0;
+
     private static float gravity = 0.0f;
     private static float scrollVelocity = 0.0f;
     public static final float GAMEGRAVITY = 4f;
@@ -35,8 +36,10 @@ public class GameView extends View {
     GameThread thread;
 
     public void startGame(){
-        
+
         createPlayer();
+
+        score = 0;
 
         platforms.add(new Platform(this.getWidth()+270, this.getHeight()-20, 260, (16.0f/1059f)*this.getHeight(), Color.WHITE));// invisible platform for index purposes
         platforms.add(new Platform(
@@ -50,12 +53,7 @@ public class GameView extends View {
         player.setVx(0);
         player.setVy(0);
 
-
-
         GameView.gameInProgress = true;
-
-
-
 
     }
 
@@ -112,38 +110,37 @@ public class GameView extends View {
                    int right,
                    int bottom){
 
-
         //startGame();
-
-
     }
 
     public void update(int delta) {
 
-        if(GameView.gameInProgress){
+        try {
 
-            player.setVy(player.getVy() + gravity );
-            player.setX(player.getX() + delta / 100f * player.getVx());
-            player.setY(player.getY() + delta / 100f * (player.getVy()+scrollVelocity));
+            if (GameView.gameInProgress) {
 
-            for(Platform plat: platforms){
-                plat.setY(plat.getY() + delta / 100f * scrollVelocity);
-            }
+                player.setVy(player.getVy() + gravity);
+                player.setX(player.getX() + delta / 100f * player.getVx());
+                player.setY(player.getY() + delta / 100f * (player.getVy() + scrollVelocity));
 
-            if(platforms.get(0).getY() >= this.getHeight()-platforms.get(0).getHeight()){
+                for (Platform plat : platforms) {
+                    plat.setY(plat.getY() + delta / 100f * scrollVelocity);
+                }
 
-                scrollVelocity = 0;
-                gravity = GAMEGRAVITY;
-                platforms.get(0).setY(this.getHeight()-platforms.get(0).getHeight());
-            }
+                if (platforms.get(0).getY() >= this.getHeight() - platforms.get(0).getHeight()) {
 
-            if (player.getX() < player.getRadius()) {
-                player.setVx(-player.getVx() * player.getElasticity());
-                player.setX(player.getRadius());
-            } else if (player.getX() > this.getWidth() - player.getRadius()) {
-                player.setVx(-player.getVx() * player.getElasticity());
-                player.setX(this.getWidth() - player.getRadius());
-            }
+                    scrollVelocity = 0;
+                    gravity = GAMEGRAVITY;
+                    platforms.get(0).setY(this.getHeight() - platforms.get(0).getHeight());
+                }
+
+                if (player.getX() < player.getRadius()) {
+                    player.setVx(-player.getVx() * player.getElasticity());
+                    player.setX(player.getRadius());
+                } else if (player.getX() > this.getWidth() - player.getRadius()) {
+                    player.setVx(-player.getVx() * player.getElasticity());
+                    player.setX(this.getWidth() - player.getRadius());
+                }
 
 //        if (player.getY() < player.getRadius()) {
 //            player.setVy(-player.getVy() * player.getElasticity());
@@ -153,56 +150,62 @@ public class GameView extends View {
 //            player.setY(this.getHeight() - player.getRadius());
 //        }
 
-            for(int i = 0; i < platforms.size(); i++){
-                Platform plat = platforms.get(i);
-                if(player.getX() < plat.getX() + plat.getLength() && player.getX() > plat.getX()){
+                for (int i = 0; i < platforms.size(); i++) {
+                    Platform plat = platforms.get(i);
+                    if (player.getX() < plat.getX() + plat.getLength() && player.getX() > plat.getX()) {
 
-                    if((player.getY()+player.getRadius() > plat.getY() && player.getY()-player.getRadius() < plat.getY()) ||
-                            (player.getY()-player.getRadius() < plat.getY() + plat.getHeight() && player.getY()+player.getRadius() > plat.getY() + plat.getHeight())) {
+                        if ((player.getY() + player.getRadius() > plat.getY() && player.getY() - player.getRadius() < plat.getY()) ||
+                                (player.getY() - player.getRadius() < plat.getY() + plat.getHeight() && player.getY() + player.getRadius() > plat.getY() + plat.getHeight())) {
 
-                        player.setVy(-player.getVy() * player.getElasticity());
+                            player.setVy(-player.getVy() * player.getElasticity());
 
-                        if(player.getY()+player.getRadius() > plat.getY() && player.getY()-player.getRadius() < plat.getY()) {
+                            if (player.getY() + player.getRadius() > plat.getY() && player.getY() - player.getRadius() < plat.getY()) {
 
 
-                            if(platforms.indexOf(plat) == 1){
+                                if (platforms.indexOf(plat) == 1) {
 
-                                player.setVy(0);
-                                player.setVx(0);
-                                scrollVelocity = 100;
-                                gravity = 0;
+                                    player.setVy(0);
+                                    player.setVx(0);
+                                    scrollVelocity = 100;
+                                    gravity = 0;
+                                    score++;
 
-                                createPlatform();
-                                platforms.remove(0);
+                                    createPlatform();
+                                    platforms.remove(0);
 
-                            }else{
-                                player.setY(plat.getY() - player.getRadius());
+                                } else {
+                                    player.setY(plat.getY() - player.getRadius());
+                                }
+
+                            } else {
+                                player.setY(plat.getY() + plat.getHeight() + player.getRadius());
                             }
+                        }
+                    }
 
-                        } else {
-                            player.setY(plat.getY() + plat.getHeight() + player.getRadius());
+                    if (player.getY() > plat.getY() && player.getY() < plat.getY() + plat.getHeight()) {
+
+                        if ((player.getX() + player.getRadius() > plat.getX() && player.getX() - player.getRadius() < plat.getX()) ||
+                                (player.getX() - player.getRadius() < plat.getX() + plat.getLength() && player.getX() + player.getRadius() > plat.getX() + plat.getHeight())) {
+
+                            player.setVx(-player.getVx() * player.getElasticity());
+
+                            if (player.getX() + player.getRadius() > plat.getX() && player.getX() - player.getRadius() < plat.getX()) {
+                                player.setX(plat.getX() - player.getRadius());
+                            } else {
+                                player.setX(plat.getX() + plat.getLength() + player.getRadius());
+                            }
                         }
                     }
                 }
 
-                if (player.getY() > plat.getY() && player.getY() < plat.getY()+plat.getHeight()) {
-
-                    if ((player.getX()+player.getRadius() > plat.getX() && player.getX()-player.getRadius() < plat.getX()) ||
-                            (player.getX()-player.getRadius() < plat.getX()+plat.getLength() && player.getX()+player.getRadius() > plat.getX()+plat.getHeight())) {
-
-                        player.setVx(-player.getVx() * player.getElasticity());
-
-                        if (player.getX()+player.getRadius() > plat.getX() && player.getX()-player.getRadius() < plat.getX()) {
-                            player.setX(plat.getX()-player.getRadius());
-                        } else {
-                            player.setX(plat.getX()+plat.getLength()+player.getRadius());
-                        }
-                    }
-                }
             }
 
-        }
+        }catch(IndexOutOfBoundsException error){
 
+            System.out.println("Platform arraylist was cleared, but this method was still running");
+
+        }
 
         postInvalidate();
     }
@@ -218,15 +221,31 @@ public class GameView extends View {
 
                 gameOver();
 
-
             }else{
 
                 p.setColor(player.getColor());
                 canvas.drawCircle(player.getX(), player.getY(), player.getRadius(), p);
 
-                for(Platform x: platforms){
-                    p.setColor(x.getColor());
-                    canvas.drawRect(x.getX(), x.getY(),x.getX()+x.getLength(), x.getY()+x.getHeight(), p);
+                for(Platform platform: platforms){
+                    p.setColor(platform.getColor());
+                    canvas.drawRect(platform.getX(), platform.getY(),platform.getX()+platform.getLength(), platform.getY()+platform.getHeight(), p);
+
+                    int textSize = 50;
+
+                    if(platforms.indexOf(platform) == 0) {
+
+                        p.setColor(Color.WHITE);
+                        p.setTextSize(textSize);
+                        canvas.drawText("" + (score), platform.getX() + platform.getLength()/2 - textSize/2, platform.getY() - 20, p);
+
+                    }else if(platforms.indexOf(platform) == 1){
+
+                        p.setColor(Color.WHITE);
+                        p.setTextSize(textSize);
+                        canvas.drawText("" + (score + 1), platform.getX() + platform.getLength()/2 - textSize/2, platform.getY() - 20, p);
+
+                    }
+
                 }
 
                 if(ControlBall.getInstance().isDrawing()){
@@ -312,16 +331,15 @@ public class GameView extends View {
 
                 }
 
-
-
             }
 
+        }else{
 
-
-
+            p.setColor(Color.WHITE);
+            p.setTextSize(66);
+            canvas.drawText("High Score: " + MainActivity.highScore , this.getWidth()/4, this.getHeight()/4, p);
 
         }
-
 
     }
 
@@ -347,6 +365,14 @@ public class GameView extends View {
         player = null;
         platforms.clear();
         gravity = 0.0f;
+
+        if(score > MainActivity.highScore){
+
+            MainActivity.getMainAcivityInstance().setHighScore(score);
+
+        }
+
+        score = 0;
 
         (MainActivity.buttonView).setAlpha(1);
 

@@ -46,11 +46,17 @@ public class GameView extends View {
     }
 
     public void createPlayer() {
-        player = new PlayerBall(this.getWidth()/2,this.getHeight()-50,(35.0f/986.0f)*this.getWidth(),0.90f,Color.WHITE);
+        player = new PlayerBall(this.getWidth()/2,this.getHeight()-((35.0f/986.0f)*this.getWidth()),(35.0f/986.0f)*this.getWidth(),0.90f,Color.WHITE);
     }
 
     public void createPlatform() {
-        platforms.add(new Platform(this.getWidth()/2, -60,260,(16.0f/1059f)*this.getHeight(),Color.WHITE));
+        platforms.add(new Platform(
+                (float) Math.random()*this.getWidth()*0.75f,
+                (float) Math.random()*(-100),
+                (float) Math.random()*this.getWidth()*0.1f + this.getWidth()*0.15f,
+                (16.0f/1059f)*this.getHeight(),
+                Color.WHITE)
+        );
     }
 
     protected void onLayout (boolean changed,
@@ -62,7 +68,13 @@ public class GameView extends View {
         createPlayer();
 
         platforms.add(new Platform(this.getWidth()+270, this.getHeight()-20, 260, (16.0f/1059f)*this.getHeight(), Color.WHITE));// invisible platform for index purposes
-        platforms.add(new Platform(this.getWidth()/2, this.getHeight()/2, 260, (16.0f/1059f)*this.getHeight(), Color.WHITE));
+        platforms.add(new Platform(
+                (float) Math.random()*this.getWidth()*0.75f,
+                this.getHeight()/2,
+                (float) Math.random()*this.getWidth()*0.1f + this.getWidth()*0.15f,
+                (16.0f/1059f)*this.getHeight(),
+                Color.WHITE)
+        );
 
         player.setVx(0);
         player.setVy(0);
@@ -80,11 +92,11 @@ public class GameView extends View {
             plat.setY(plat.getY() + delta / 100f * scrollVelocity);
         }
 
-        if(platforms.get(0).getY() >= this.getHeight()-20){
+        if(platforms.get(0).getY() >= this.getHeight()-platforms.get(0).getHeight()){
 
             scrollVelocity = 0;
             gravity = GAMEGRAVITY;
-            platforms.get(0).setY(this.getHeight()-20);
+            platforms.get(0).setY(this.getHeight()-platforms.get(0).getHeight());
         }
 
         if (player.getX() < player.getRadius()) {

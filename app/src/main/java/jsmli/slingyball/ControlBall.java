@@ -11,6 +11,13 @@ import android.view.View;
 
 public class ControlBall extends View {
 
+    private static ControlBall controlBallInstance = null;
+
+    public static ControlBall getInstance(){
+
+        return controlBallInstance;
+    }
+
     private float controlBallCenterX;
     private float controlBallCenterY;
     private float controlBallRadius;
@@ -19,7 +26,7 @@ public class ControlBall extends View {
 
     boolean validTouch;
 
-    boolean drawing = false;
+    private boolean drawing = false;
 
     private Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
 
@@ -36,6 +43,8 @@ public class ControlBall extends View {
 
     public ControlBall(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+
+        controlBallInstance = this;
 
         p.setColor(Color.WHITE);
         p.setStrokeWidth(10);
@@ -82,9 +91,12 @@ public class ControlBall extends View {
                             Math.pow(controlBallRadius, 2)) {
 
                         drawing = true;
+
                         startX = event.getX();
                         startY = event.getY();
+
                     }
+
                     validTouch = true;
 
                 }else{
@@ -114,14 +126,42 @@ public class ControlBall extends View {
                         GameView.setGravity(GameView.GAMEGRAVITY);
                     }
 
+                    if (drawing) {
+                        playerListener.setVx(startX - endX);
+                        playerListener.setVy(startY - endY);
+                    }
+
                     drawing = false;
 
-                    playerListener.setVx(startX - endX);
-                    playerListener.setVy(startY - endY);
                 }
 
                 return true;
         }
         return false;
     }
+
+    public boolean isDrawing(){
+
+        return drawing;
+    }
+
+    public float getStartX(){
+        return startX;
+    }
+
+    public float getStartY(){
+        return startY;
+    }
+
+    public float getEndX(){
+        return endX;
+    }
+
+    public float getEndY(){
+        return endY;
+    }
+
+
+
+
 }

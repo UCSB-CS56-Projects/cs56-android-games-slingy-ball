@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Slingy Ball</string>
+    <string name="play_text">Play</string>
+    <string name="pause_text">Pause</string>
 </resources>

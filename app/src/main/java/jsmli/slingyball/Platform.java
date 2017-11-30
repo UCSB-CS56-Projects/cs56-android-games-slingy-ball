@@ -5,16 +5,17 @@ public class Platform {
     private float x;
     private float y;
     private float length;
-    private float height = 16;
+    private float height;
 
     private int color;
 
-    public Platform(float x, float y, float length, int color) {
+    public Platform(float x, float y, float length, float height, int color) {
 
         this.x = x;
         this.y = y;
         this.color = color;
         this.length = length;
+        this.height = height;
 
     }
 

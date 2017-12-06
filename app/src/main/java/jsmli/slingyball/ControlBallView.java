@@ -9,6 +9,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+// The view that the player interacts with to make shots.
+// Contains methods related to screen touching.
 public class ControlBallView extends View {
 
     private static ControlBallView controlBallViewInstance = null;

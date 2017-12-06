@@ -1,5 +1,7 @@
 package jsmli.slingyball;
 
+// The object representing the main obstacle in the game.
+// Contains methods related to getting and setting Platform attributes.
 public class Platform {
 
     private float x;

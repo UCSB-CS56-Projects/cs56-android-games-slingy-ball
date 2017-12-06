@@ -13,7 +13,7 @@ When a player lands on a platform, they earn a point, and the next platform will
 ### Views
 *The following classes extend View*
 * *GameView.java* : The view that manages the game screen, or the viewing area (the top of the game). Contains methods related to drawing game objects, as well as the physics for collisions.
-* *ControlBall.java* : The view that the player interacts with to make shots. Contains methods related to screen touching.
+* *ControlBallView.java* : The view that the player interacts with to make shots. Contains methods related to screen touching.
 ### Game Objects
 * *PlayerBall.java* : The object that bounces around on the GameView. Contains methods related to getting and setting PlayerBall's properties.
 * *Platform.java* : The object representing the main obstacle in the game. Contains methods related to getting and setting Platform attributes.

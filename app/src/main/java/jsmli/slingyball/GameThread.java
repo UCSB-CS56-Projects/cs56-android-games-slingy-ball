@@ -2,6 +2,7 @@ package jsmli.slingyball;
 
 import android.os.SystemClock;
 
+// The thread responsible for calculating PlayerBall and Platform movement, and then redrawing them.
 public class GameThread extends Thread {
 
     private GameView gameView;

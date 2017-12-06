@@ -9,6 +9,7 @@ import android.graphics.PointF;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -53,6 +54,9 @@ public class GameView extends View {
         player.setVx(0);
         player.setVy(0);
 
+        ControlBallView.getInstance().resetShotsRemaining();
+        MainActivity.getMainAcivityInstance().updateTextView("Shots Remaining: " + ControlBallView.getInstance().numShotsRemaining());
+
         GameView.gameInProgress = true;
 
     }
@@ -94,6 +98,11 @@ public class GameView extends View {
         );
     }
 
+    // Creates a Platform above the viewable area with randomly-selected x, y, and length
+    // All randomized properties of the Platform should remain in screen bounds
+    // x: the x-axis location of the left side of the Platform, generated to be on the left 3/4 of the play area.
+    // y: the y-axis location of the top of the Platform, generated above the viewable area (note the negative factor)
+    // length: the length of the Platform, extending to the right of the x property; ranges from 15%-25% of screen width
     public void createPlatform() {
         platforms.add(new Platform(
                 (float) Math.random()*this.getWidth()*0.75f,
@@ -110,7 +119,6 @@ public class GameView extends View {
                    int right,
                    int bottom){
 
-        //startGame();
     }
 
     public void update(int delta) {
@@ -142,14 +150,6 @@ public class GameView extends View {
                     player.setX(this.getWidth() - player.getRadius());
                 }
 
-//        if (player.getY() < player.getRadius()) {
-//            player.setVy(-player.getVy() * player.getElasticity());
-//            player.setY(player.getRadius()); }
-//        if (player.getY() > this.getHeight() - player.getRadius()) {
-//            player.setVy(-player.getVy() * player.getElasticity());
-//            player.setY(this.getHeight() - player.getRadius());
-//        }
-
                 for (int i = 0; i < platforms.size(); i++) {
                     Platform plat = platforms.get(i);
                     if (player.getX() < plat.getX() + plat.getLength() && player.getX() > plat.getX()) {
@@ -161,7 +161,6 @@ public class GameView extends View {
 
                             if (player.getY() + player.getRadius() > plat.getY() && player.getY() - player.getRadius() < plat.getY()) {
 
-
                                 if (platforms.indexOf(plat) == 1) {
 
                                     player.setVy(0);
@@ -169,6 +168,28 @@ public class GameView extends View {
                                     scrollVelocity = 100;
                                     gravity = 0;
                                     score++;
+
+                                    // if the ball lands within the middle 20% of the platform, grant bonus shot
+                                    if ((player.getX() > 0.4f*platforms.get(1).getLength()+platforms.get(1).getX())
+                                        && player.getX() < 0.6f*platforms.get(1).getLength()+platforms.get(1).getX()) {
+
+                                        MainActivity.getMainAcivityInstance().runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Toast.makeText(getContext(), "Middle Shot!", Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+
+                                        ControlBallView.getInstance().incrementShotsRemaining();
+                                    }
+
+                                    ControlBallView.getInstance().incrementShotsRemaining();
+                                    MainActivity.getMainAcivityInstance().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            MainActivity.getMainAcivityInstance().updateTextView("Shots Remaining: " + ControlBallView.getInstance().numShotsRemaining());
+                                        }
+                                    });
 
                                     createPlatform();
                                     platforms.remove(0);
@@ -223,32 +244,36 @@ public class GameView extends View {
 
             }else{
 
+                // draws player ball
                 p.setColor(player.getColor());
                 canvas.drawCircle(player.getX(), player.getY(), player.getRadius(), p);
 
+                // loop to draw all platforms
                 for(Platform platform: platforms){
                     p.setColor(platform.getColor());
                     canvas.drawRect(platform.getX(), platform.getY(),platform.getX()+platform.getLength(), platform.getY()+platform.getHeight(), p);
 
                     int textSize = 50;
 
+                    // the x-position of the platform number seems to be off-center...
                     if(platforms.indexOf(platform) == 0) {
 
                         p.setColor(Color.WHITE);
                         p.setTextSize(textSize);
-                        canvas.drawText("" + (score), platform.getX() + platform.getLength()/2 - textSize/2, platform.getY() - 20, p);
+                        canvas.drawText("" + (score), platform.getX() + platform.getLength()/2 - textSize/3, platform.getY() - 20, p);
 
                     }else if(platforms.indexOf(platform) == 1){
 
                         p.setColor(Color.WHITE);
                         p.setTextSize(textSize);
-                        canvas.drawText("" + (score + 1), platform.getX() + platform.getLength()/2 - textSize/2, platform.getY() - 20, p);
+                        canvas.drawText("" + (score + 1), platform.getX() + platform.getLength()/2 - textSize/3, platform.getY() - 20, p);
 
                     }
 
                 }
 
-                if(ControlBall.getInstance().isDrawing()){
+                // draws arrow guide for the player ball
+                if(ControlBallView.getInstance().isDrawing()){
 
                     p.setColor(Color.WHITE);
                     p.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -257,7 +282,7 @@ public class GameView extends View {
 
                     Path path = new Path();
                     PointF start = new PointF(player.getX(), player.getY());
-                    PointF end = new PointF(start.x- (ControlBall.getInstance().getEndX() - ControlBall.getInstance().getStartX()) , start.y - (ControlBall.getInstance().getEndY() - ControlBall.getInstance().getStartY()));
+                    PointF end = new PointF(start.x- (ControlBallView.getInstance().getEndX() - ControlBallView.getInstance().getStartX()) , start.y - (ControlBallView.getInstance().getEndY() - ControlBallView.getInstance().getStartY()));
 
                     path.moveTo(start.x, start.y);
                     path.lineTo(end.x, end.y);
@@ -289,6 +314,7 @@ public class GameView extends View {
 
                 }
 
+                // draws a small arrow that indicates the x-position of the ball when it is above the viewable area
                 if (player.getY() < 0) {
 
                     p.setColor(Color.WHITE);
@@ -374,6 +400,7 @@ public class GameView extends View {
 
         score = 0;
 
+        // make "replay" button visible and active again
         (MainActivity.buttonView).setAlpha(1);
 
     }

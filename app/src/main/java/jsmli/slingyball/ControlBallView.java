@@ -9,13 +9,13 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class ControlBall extends View {
+public class ControlBallView extends View {
 
-    private static ControlBall controlBallInstance = null;
+    private static ControlBallView controlBallViewInstance = null;
 
-    public static ControlBall getInstance(){
+    public static ControlBallView getInstance(){
 
-        return controlBallInstance;
+        return controlBallViewInstance;
     }
 
     private float controlBallCenterX;
@@ -35,23 +35,25 @@ public class ControlBall extends View {
     private float endX;
     private float endY;
 
-    public ControlBall(Context context) {
+    private int shotsRemaining = 1;
+
+    public ControlBallView(Context context) {
         super(context);
 
         this.setBackgroundColor(Color.RED);
     }
 
-    public ControlBall(Context context, @Nullable AttributeSet attrs) {
+    public ControlBallView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
 
-        controlBallInstance = this;
+        controlBallViewInstance = this;
 
         p.setColor(Color.WHITE);
         p.setStrokeWidth(10);
         this.setBackgroundColor(Color.RED);
     }
 
-    public ControlBall(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public ControlBallView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -84,8 +86,10 @@ public class ControlBall extends View {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
 
-                if(GameView.getScrollVelocity() == 0) {
+                // if the game is not scrolling and player still has shots
+                if((GameView.getScrollVelocity() == 0)  && haveShotsRemaining()) {
 
+                    // if the touch is within the white control ball
                     if (Math.pow((event.getX() - controlBallCenterX), 2) +
                             Math.pow((event.getY() - controlBallCenterY), 2) <
                             Math.pow(controlBallRadius, 2)) {
@@ -131,6 +135,9 @@ public class ControlBall extends View {
                         playerListener.setVy(startY - endY);
                     }
 
+                    decrementShotsRemaining();
+                    MainActivity.getMainAcivityInstance().updateTextView("Shots Remaining: " + ControlBallView.getInstance().numShotsRemaining());
+
                     drawing = false;
 
                 }
@@ -138,6 +145,25 @@ public class ControlBall extends View {
                 return true;
         }
         return false;
+    }
+
+    public int numShotsRemaining() {
+        return shotsRemaining;
+    }
+    public boolean haveShotsRemaining() {
+        return (shotsRemaining >= 1);
+    }
+
+    public void incrementShotsRemaining() {
+        shotsRemaining++;
+    }
+
+    public void decrementShotsRemaining() {
+        shotsRemaining--;
+    }
+
+    public void resetShotsRemaining() {
+        shotsRemaining = 1;
     }
 
     public boolean isDrawing(){

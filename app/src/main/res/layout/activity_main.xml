@@ -8,7 +8,7 @@
     tools:context="jsmli.slingyball.MainActivity"
     tools:layout_editor_absoluteY="25dp">
 
-    <jsmli.slingyball.ControlBall
+    <jsmli.slingyball.ControlBallView
         android:id="@+id/controlBall2"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -90,5 +90,17 @@
         android:text="@string/pause_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/controlBall2"
+        app:layout_constraintTop_toBottomOf="@+id/gameView" />
 
 </android.support.constraint.ConstraintLayout>

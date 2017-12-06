@@ -109,8 +109,7 @@ public class GameView extends View {
                    int top,
                    int right,
                    int bottom){
-
-        //startGame();
+        
     }
 
     public void update(int delta) {
@@ -141,14 +140,6 @@ public class GameView extends View {
                     player.setVx(-player.getVx() * player.getElasticity());
                     player.setX(this.getWidth() - player.getRadius());
                 }
-
-//        if (player.getY() < player.getRadius()) {
-//            player.setVy(-player.getVy() * player.getElasticity());
-//            player.setY(player.getRadius()); }
-//        if (player.getY() > this.getHeight() - player.getRadius()) {
-//            player.setVy(-player.getVy() * player.getElasticity());
-//            player.setY(this.getHeight() - player.getRadius());
-//        }
 
                 for (int i = 0; i < platforms.size(); i++) {
                     Platform plat = platforms.get(i);

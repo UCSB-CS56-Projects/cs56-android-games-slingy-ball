@@ -9,13 +9,13 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class ControlBall extends View {
+public class ControlBallView extends View {
 
-    private static ControlBall controlBallInstance = null;
+    private static ControlBallView controlBallViewInstance = null;
 
-    public static ControlBall getInstance(){
+    public static ControlBallView getInstance(){
 
-        return controlBallInstance;
+        return controlBallViewInstance;
     }
 
     private float controlBallCenterX;
@@ -35,23 +35,23 @@ public class ControlBall extends View {
     private float endX;
     private float endY;
 
-    public ControlBall(Context context) {
+    public ControlBallView(Context context) {
         super(context);
 
         this.setBackgroundColor(Color.RED);
     }
 
-    public ControlBall(Context context, @Nullable AttributeSet attrs) {
+    public ControlBallView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
 
-        controlBallInstance = this;
+        controlBallViewInstance = this;
 
         p.setColor(Color.WHITE);
         p.setStrokeWidth(10);
         this.setBackgroundColor(Color.RED);
     }
 
-    public ControlBall(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public ControlBallView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

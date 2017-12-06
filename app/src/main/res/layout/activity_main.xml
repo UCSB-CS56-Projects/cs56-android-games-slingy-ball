@@ -8,7 +8,7 @@
     tools:context="jsmli.slingyball.MainActivity"
     tools:layout_editor_absoluteY="25dp">
 
-    <jsmli.slingyball.ControlBall
+    <jsmli.slingyball.ControlBallView
         android:id="@+id/controlBall2"
         android:layout_width="0dp"
         android:layout_height="0dp"

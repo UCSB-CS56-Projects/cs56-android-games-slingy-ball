@@ -14,7 +14,7 @@ public class PlayerBall {
         this.radius = radius;
         this.elasticity = elasticity;
         this.color = color;
-        ControlBall.playerListener = this;
+        ControlBallView.playerListener = this;
     }
 
     public float getX() {

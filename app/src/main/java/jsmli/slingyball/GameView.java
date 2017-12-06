@@ -94,6 +94,11 @@ public class GameView extends View {
         );
     }
 
+    // Creates a Platform above the viewable area with randomly-selected x, y, and length
+    // All randomized properties of the Platform should remain in screen bounds
+    // x: the x-axis location of the left side of the Platform, generated to be on the left 3/4 of the play area.
+    // y: the y-axis location of the top of the Platform, generated above the viewable area (note the negative factor)
+    // length: the length of the Platform, extending to the right of the x property; ranges from 15%-25% of screen width
     public void createPlatform() {
         platforms.add(new Platform(
                 (float) Math.random()*this.getWidth()*0.75f,
@@ -109,7 +114,7 @@ public class GameView extends View {
                    int top,
                    int right,
                    int bottom){
-        
+
     }
 
     public void update(int delta) {
@@ -214,9 +219,11 @@ public class GameView extends View {
 
             }else{
 
+                // draws player ball
                 p.setColor(player.getColor());
                 canvas.drawCircle(player.getX(), player.getY(), player.getRadius(), p);
 
+                // loop to draw all platforms
                 for(Platform platform: platforms){
                     p.setColor(platform.getColor());
                     canvas.drawRect(platform.getX(), platform.getY(),platform.getX()+platform.getLength(), platform.getY()+platform.getHeight(), p);
@@ -239,7 +246,8 @@ public class GameView extends View {
 
                 }
 
-                if(ControlBall.getInstance().isDrawing()){
+                // draws arrow guide for the player ball
+                if(ControlBallView.getInstance().isDrawing()){
 
                     p.setColor(Color.WHITE);
                     p.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -248,7 +256,7 @@ public class GameView extends View {
 
                     Path path = new Path();
                     PointF start = new PointF(player.getX(), player.getY());
-                    PointF end = new PointF(start.x- (ControlBall.getInstance().getEndX() - ControlBall.getInstance().getStartX()) , start.y - (ControlBall.getInstance().getEndY() - ControlBall.getInstance().getStartY()));
+                    PointF end = new PointF(start.x- (ControlBallView.getInstance().getEndX() - ControlBallView.getInstance().getStartX()) , start.y - (ControlBallView.getInstance().getEndY() - ControlBallView.getInstance().getStartY()));
 
                     path.moveTo(start.x, start.y);
                     path.lineTo(end.x, end.y);
@@ -280,6 +288,7 @@ public class GameView extends View {
 
                 }
 
+                // draws a small arrow that indicates the x-position of the ball when it is above the viewable area
                 if (player.getY() < 0) {
 
                     p.setColor(Color.WHITE);
@@ -365,6 +374,7 @@ public class GameView extends View {
 
         score = 0;
 
+        // make "replay" button visible and active again
         (MainActivity.buttonView).setAlpha(1);
 
     }

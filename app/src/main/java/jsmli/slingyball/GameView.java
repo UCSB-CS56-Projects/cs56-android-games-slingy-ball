@@ -9,6 +9,7 @@ import android.graphics.PointF;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -168,6 +169,20 @@ public class GameView extends View {
                                     gravity = 0;
                                     score++;
 
+                                    // if the ball lands within the middle 20% of the platform, grant bonus shot
+                                    if ((player.getX() > 0.4f*platforms.get(1).getLength()+platforms.get(1).getX())
+                                        && player.getX() < 0.6f*platforms.get(1).getLength()+platforms.get(1).getX()) {
+
+                                        MainActivity.getMainAcivityInstance().runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Toast.makeText(getContext(), "Middle Shot!", Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+
+                                        ControlBallView.getInstance().incrementShotsRemaining();
+                                    }
+
                                     ControlBallView.getInstance().incrementShotsRemaining();
                                     MainActivity.getMainAcivityInstance().runOnUiThread(new Runnable() {
                                         @Override
@@ -175,8 +190,6 @@ public class GameView extends View {
                                             MainActivity.getMainAcivityInstance().updateTextView("Shots Remaining: " + ControlBallView.getInstance().numShotsRemaining());
                                         }
                                     });
-
-
 
                                     createPlatform();
                                     platforms.remove(0);
@@ -242,17 +255,18 @@ public class GameView extends View {
 
                     int textSize = 50;
 
+                    // the x-position of the platform number seems to be off-center...
                     if(platforms.indexOf(platform) == 0) {
 
                         p.setColor(Color.WHITE);
                         p.setTextSize(textSize);
-                        canvas.drawText("" + (score), platform.getX() + platform.getLength()/2 - textSize/2, platform.getY() - 20, p);
+                        canvas.drawText("" + (score), platform.getX() + platform.getLength()/2 - textSize/3, platform.getY() - 20, p);
 
                     }else if(platforms.indexOf(platform) == 1){
 
                         p.setColor(Color.WHITE);
                         p.setTextSize(textSize);
-                        canvas.drawText("" + (score + 1), platform.getX() + platform.getLength()/2 - textSize/2, platform.getY() - 20, p);
+                        canvas.drawText("" + (score + 1), platform.getX() + platform.getLength()/2 - textSize/3, platform.getY() - 20, p);
 
                     }
 

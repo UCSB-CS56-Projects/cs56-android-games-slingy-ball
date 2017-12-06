@@ -27,7 +27,7 @@ Run in simulator through Android Studio or install on phone using Android Studio
 [Link to Issues Page](https://github.com/UCSB-CS56-Projects/cs56-android-games-slingy-ball/issues)
 
 ## F17 final remarks
-*Jonathan Chen, Jackson Li*
+*Jonathan Chen, Jackson Li*  
 Our iteration is the first of this project, and so there are numerous issues, most related to code design. 
 However, since it is new, there are a large number of new features and issues for you to work on. 
 One of the most beneficial code refactoring opportunities is in creating a *Collidable* interface that platforms, walls, and the eventual powerups can use. 

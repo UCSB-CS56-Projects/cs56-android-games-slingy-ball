@@ -53,6 +53,9 @@ public class GameView extends View {
         player.setVx(0);
         player.setVy(0);
 
+        ControlBallView.getInstance().resetShotsRemaining();
+        MainActivity.getMainAcivityInstance().updateTextView("Shots Remaining: " + ControlBallView.getInstance().numShotsRemaining());
+
         GameView.gameInProgress = true;
 
     }
@@ -157,7 +160,6 @@ public class GameView extends View {
 
                             if (player.getY() + player.getRadius() > plat.getY() && player.getY() - player.getRadius() < plat.getY()) {
 
-
                                 if (platforms.indexOf(plat) == 1) {
 
                                     player.setVy(0);
@@ -165,6 +167,16 @@ public class GameView extends View {
                                     scrollVelocity = 100;
                                     gravity = 0;
                                     score++;
+
+                                    ControlBallView.getInstance().incrementShotsRemaining();
+                                    MainActivity.getMainAcivityInstance().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            MainActivity.getMainAcivityInstance().updateTextView("Shots Remaining: " + ControlBallView.getInstance().numShotsRemaining());
+                                        }
+                                    });
+
+
 
                                     createPlatform();
                                     platforms.remove(0);

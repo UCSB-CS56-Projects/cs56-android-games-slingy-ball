@@ -35,6 +35,8 @@ public class ControlBallView extends View {
     private float endX;
     private float endY;
 
+    private int shotsRemaining = 1;
+
     public ControlBallView(Context context) {
         super(context);
 
@@ -84,8 +86,10 @@ public class ControlBallView extends View {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
 
-                if(GameView.getScrollVelocity() == 0) {
+                // if the game is not scrolling and player still has shots
+                if((GameView.getScrollVelocity() == 0)  && haveShotsRemaining()) {
 
+                    // if the touch is within the white control ball
                     if (Math.pow((event.getX() - controlBallCenterX), 2) +
                             Math.pow((event.getY() - controlBallCenterY), 2) <
                             Math.pow(controlBallRadius, 2)) {
@@ -131,6 +135,9 @@ public class ControlBallView extends View {
                         playerListener.setVy(startY - endY);
                     }
 
+                    decrementShotsRemaining();
+                    MainActivity.getMainAcivityInstance().updateTextView("Shots Remaining: " + ControlBallView.getInstance().numShotsRemaining());
+
                     drawing = false;
 
                 }
@@ -138,6 +145,25 @@ public class ControlBallView extends View {
                 return true;
         }
         return false;
+    }
+
+    public int numShotsRemaining() {
+        return shotsRemaining;
+    }
+    public boolean haveShotsRemaining() {
+        return (shotsRemaining >= 1);
+    }
+
+    public void incrementShotsRemaining() {
+        shotsRemaining++;
+    }
+
+    public void decrementShotsRemaining() {
+        shotsRemaining--;
+    }
+
+    public void resetShotsRemaining() {
+        shotsRemaining = 1;
     }
 
     public boolean isDrawing(){

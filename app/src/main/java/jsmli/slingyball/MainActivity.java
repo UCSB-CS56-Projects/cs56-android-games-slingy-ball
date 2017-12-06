@@ -6,11 +6,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity {
 
     public static Button buttonView;
+    public static TextView textView;
     private static MainActivity mainAcivityInstance;
+
 
     public static int highScore;
 
@@ -24,9 +29,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         buttonView = (Button) findViewById(R.id.button);
+        textView = (TextView) findViewById(R.id.textView);
+
+        textView.setText("Shots Remaining: ");
 
         SharedPreferences prefs = this.getSharedPreferences("highScore", Context.MODE_PRIVATE);
         MainActivity.highScore = prefs.getInt("highScoreKey", 0);
+
 
         mainAcivityInstance = this;
 
@@ -55,8 +64,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void clickPauseButton(View v){
+    public void updateTextView(String s) {
+        textView.setText(s);
+    }
 
+    // unimplemented
+    public void clickPauseButton(View v){
 
     }
 }

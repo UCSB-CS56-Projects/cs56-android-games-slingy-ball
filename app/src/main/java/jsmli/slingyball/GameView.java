@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+// The view that manages the game screen, or the viewing area (the top of the game).
+// Contains methods related to drawing game objects, as well as the physics for collisions.
 public class GameView extends View {
 
     private static GameView gameViewInstance = null;

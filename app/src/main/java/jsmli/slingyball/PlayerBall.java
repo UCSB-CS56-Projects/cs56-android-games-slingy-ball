@@ -1,5 +1,7 @@
 package jsmli.slingyball;
 
+// The object that bounces around on the GameView.
+// Contains methods related to getting and setting PlayerBall's properties.
 public class PlayerBall {
 
     private float x, y, vx, vy;

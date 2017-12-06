@@ -2,14 +2,14 @@ package jsmli.slingyball;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
+// The main Activity for the Android app.
+// Contains methods related to score-saving and starting the game.
 public class MainActivity extends AppCompatActivity {
 
     public static Button buttonView;
